@@ -68,6 +68,26 @@ class GmailImap {
     });
   }
 
+  waitForEmail() {
+    return new Promise(async(resolve, reject) => {
+      let received = false;
+      this.imap.on("mail", async() => {
+        received = true;
+        const result = await this.getMails(this.inbox.uidnext);
+        if (result.length)
+          resolve(result[0]);
+      });
+
+      wait(15000).then(() => {
+        received = true;
+        reject("Timeout");
+      });
+      while (!received) {
+        await wait(300);
+      }
+    });
+  }
+
   end() {
     this.imap.end();
   }
@@ -85,11 +105,7 @@ function wait(timeout) {
   await gmailImap.connect();
   await gmailImap.openInbox();
   console.log(await gmailImap.getMails("1:*"));
+  // const email = await gmailImap.waitForEmail();
+  // console.log(email.subject);
   await gmailImap.end();
 })()
-
-/*
-imap.on("mail", function(newMail) {
-  console.log("New mail", newMail);
-});
-*/

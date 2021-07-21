@@ -5,10 +5,16 @@ purposes.
 
 ## Prerequisites
 
-Gmail mail with the IMAP enabled.
+Gmail account with the IMAP enabled.
+
+### Installation
+
+```sh
+npm i
+```
 
 ## Running 
 
-```
+```sh
 USER_EMAIL='example@gmail.com' USER_PASSWORD='PAssWoRD' npm run start
 ```
